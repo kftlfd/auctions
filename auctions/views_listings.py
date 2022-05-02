@@ -67,7 +67,7 @@ def listing_add(request):
             return redirect(reverse('user_listings'))
         
         else:
-            messages.add_message(request, messages.WARNING, 'Invalid form')
+            messages.add_message(request, messages.ERROR, 'Invalid form')
 
     context = {
         'form': form}
@@ -108,7 +108,7 @@ def listing_edit(request, listing_id):
             return redirect(reverse('listing_view', kwargs={'listing_id': listing_id}))
 
         else:
-            messages.add_message(request, messages.WARNING, 'Invalid form')
+            messages.add_message(request, messages.ERROR, 'Invalid form')
 
     context = {
         'listing': listing,
@@ -135,7 +135,7 @@ def listing_comment(request, listing_id):
             messages.add_message(request, messages.SUCCESS, 'Comment added')
         
         else:
-            messages.add_message(request, messages.WARNING, 'Comment fail')
+            messages.add_message(request, messages.ERROR, 'Comment fail')
     
     return redirect('listing_view', listing_id=listing_id)
     
@@ -163,7 +163,7 @@ def listing_bid(request, listing_id):
         form = BidForm(request.POST)
         
         if not form.is_valid():
-            messages.add_message(request, messages.WARNING, 'Bid fail')
+            messages.add_message(request, messages.ERROR, 'Bid fail')
             return redirect('listing_view', listing_id=listing_id)
 
         amount = form.cleaned_data['amount']
@@ -186,7 +186,7 @@ def listing_bid(request, listing_id):
             listing.save()
             messages.add_message(request, messages.SUCCESS, 'Bid added')
         else:
-            messages.add_message(request, messages.WARNING, 'Bid needs to be higher than the current one')
+            messages.add_message(request, messages.ERROR, 'Bid needs to be higher than the current one')
 
     return redirect('listing_view', listing_id=listing_id)
 

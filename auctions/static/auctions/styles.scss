@@ -1,10 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Beau+Rivage&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Beau+Rivage&display=swap');
 .brand-logo {
-  font-family: "Beau Rivage", cursive;
+  font-family: 'Beau Rivage', cursive;
   text-align: center;
   font-size: 5rem;
   margin: 0;
 }
+
 
 body {
   width: min(100%, 900px);
@@ -14,11 +15,11 @@ body {
   display: flex;
   flex-direction: column;
 }
-
 .main {
   flex-grow: 1;
   padding: 1rem;
 }
+
 
 .messages {
   position: fixed;
@@ -27,49 +28,42 @@ body {
   width: 100%;
   padding-top: 1rem;
 }
-
 .messages .alert {
   margin-inline: auto;
   width: min(100% - 2rem, 600px);
 }
 
+
 .nav-item > .nav-link {
   padding-inline: 0.75rem;
 }
-
 .navbar-nav {
   width: 100%;
   gap: 0.5rem;
 }
-
 .flex-grow {
   flex-grow: 1;
 }
-
 .nav-search {
   width: auto;
 }
-
 .nav-search:not(:hover) {
   background-color: inherit;
   border: 1px solid transparent;
 }
-
 .user-toggle {
   display: inline-block;
   min-width: 5rem;
   text-align: center;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 0.25rem;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: .25rem;
   background-color: #fff;
 }
-
 .watchlist-link {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
 .watchlist-counter {
   display: inline-block;
   height: 1rem;
@@ -81,6 +75,7 @@ body {
   border-radius: 0.25rem;
 }
 
+
 .auth {
   margin-top: 5rem;
   display: grid;
@@ -88,15 +83,12 @@ body {
   align-items: center;
   gap: 1rem;
 }
-
 .auth h2 {
   text-align: center;
 }
-
 .auth form {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-/*# sourceMappingURL=styles.css.map */

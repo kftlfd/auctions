@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -20,9 +21,8 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
         else:
-            return render(request, "auctions/login.html", {
-                "message": "Invalid username and/or password."
-            })
+            messages.add_message(request, messages.ERROR, 'Invalid username and/or password.')
+            return render(request, "auctions/login.html")
     else:
         return render(request, "auctions/login.html")
 
@@ -41,18 +41,16 @@ def register(request):
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
-            return render(request, "auctions/register.html", {
-                "message": "Passwords must match."
-            })
+            messages.add_message(request, messages.ERROR, 'Passwords must match.')
+            return render(request, "auctions/register.html")
 
         # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
         except IntegrityError:
-            return render(request, "auctions/register.html", {
-                "message": "Username already taken."
-            })
+            messages.add_message(request, messages.ERROR, 'Username already taken.')
+            return render(request, "auctions/register.html")
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
