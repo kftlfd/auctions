@@ -1,5 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Beau+Rivage&display=swap');
+
 body {
   width: min(100% - 2rem, 800px);
   margin: 0 auto;
   padding: 0;
+}
+
+.brand-logo {
+  font-family: 'Beau Rivage', cursive;
 }
