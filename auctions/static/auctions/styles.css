@@ -1,0 +1,5 @@
+body {
+  width: min(100% - 2rem, 800px);
+  margin: 0 auto;
+  padding: 0;
+}

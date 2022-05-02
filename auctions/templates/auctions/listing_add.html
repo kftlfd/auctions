@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+
+<h2>Add Listing</h2>
+
+<form action="{% url 'listing_add' %}" method="POST">
+  {% csrf_token %}
+  <div>{{ form.title.label }} {{ form.title }} {{ form.title.errors }}</div>
+  <div>{{ form.description.label }} {{ form.description }} {{ form.description.errors }}</div>
+  <div>{{ form.img_url.label }} {{ form.img_url }} {{ form.img_url.errors }}</div>
+  <div>{{ form.starting_bid.label }} {{ form.starting_bid }} {{ form.starting_bid.errors }}</div>
+
+  <div>{{ form.category.label }} {{ form.category }} {{ form.category.errors }}</div>
+  <div>{{ form.category_new.label }} {{ form.category_new }} {{ form.category_new.errors }}</div>
+  
+  <input type="submit" value="Post">
+</form>
+
+{% endblock %}

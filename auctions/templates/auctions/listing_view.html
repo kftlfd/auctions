@@ -1,0 +1,136 @@
+{% extends "auctions/layout.html" %}
+{% load custom_tags %}
+
+{% block body %}
+
+<h2>Listing</h2>
+
+
+<!-- Listing info -->
+<div class="listing">
+  <ul>
+    <li>title: {{ listing.title }}</li>    
+    
+    {% if listing.img_url %}
+    <img src="{{ listing.img_url }}" alt="{{ listing.title }}">
+    {% endif %}
+
+    <li>description: {{ listing.description }}</li>
+    
+    <li>category: {{ listing.category }}</li>
+    
+    {% if not listing.active %}
+    <li>status: Closed</li>
+    {% endif %}      
+  </ul>
+</div>
+
+
+<!-- Owner controls -->
+{% if listing.user_id == request.user %}
+<div>
+  <form action="{% url 'listing_edit' listing.id %}" method="GET">
+    <input type="submit" value="Edit">
+  </form>
+  
+  <form action="{% url 'listing_status' listing.id %}" method="POST">
+    {% csrf_token %}
+    {% if listing.active %}
+    <input type="submit" name='close' value="Close">
+    {% else %}
+    <input type="submit" name='open' value="Open">
+    {% endif %}
+  </form>
+
+  <form action="{% url 'listing_bids' listing.id %}" method="GET">
+    <input type="submit" value="All Bids">
+  </form>
+</div>
+{% endif %}
+
+
+<!-- Bids -->
+<div>
+  <div>
+    {% if listing.active %}
+      Current bid: 
+    {% else %}
+      Final bid:
+    {% endif %}
+
+    {% listing_bid listing %}
+
+    {% if current_bid %}
+      from {{ current_bid.user_id }}
+    {% endif %}
+  </div>
+
+  {% user_bid user listing as u_bid %}
+  {% if u_bid %}
+  <form action="{% url 'listing_bid' listing.id %}" method="POST">
+    {% csrf_token %}
+    <span>Your latest bid is: {{ u_bid }}</span>
+    <input type="submit" name='remove' value="Remove bid">
+  </form>
+  {% endif %}
+  
+  {% if listing.active and request.user.is_authenticated and listing.user_id != request.user%}
+  <form action="{% url 'listing_bid' listing.id %}" method="POST">
+    {% csrf_token %}
+    {{ form_bid.amount }}
+    <input type="submit" value="Make bid">
+  </form>
+  {% endif %}
+
+  {% if not listing.active and listing.current_bid and listing.current_bid.user_id == request.user %}
+  <div>Congrats, you won!</div>
+  {% endif %}
+
+  {% if listing.active and not request.user.is_authenticated %}
+  <div>Sign in to make a bid</div>
+  {% endif %}
+</div>
+
+
+<!-- Watchlist -->
+{% if request.user.is_authenticated and listing.user_id != request.user%}
+<div>
+  <form action="{% url 'listing_watch' listing.id %}" method="POST">
+    {% csrf_token %}
+    {% if watching %}
+    <input type="submit" name="remove" value="Remove from Watchlist">
+    {% else %}
+    <input type="submit" name="add" value="Add to Watchlist">
+    {% endif %}
+  </form>
+</div>
+{% endif %}
+
+
+
+<!-- Comments -->
+<div>
+  <h3>Comments</h3>
+  
+  <div>
+    {% for comment in comments %}
+    <div>
+      {{ comment.user_id }} |
+      {{ comment.content }} |
+      {{ comment.time }}
+    </div>
+    {% endfor %}
+  </div>
+    
+  {% if request.user.is_authenticated %}
+  <form action="{% url 'listing_comment' listing.id %}" method="POST">
+    {% csrf_token %}
+    {{ form_comment.content }}
+    <input type="submit" value="Add comment">
+  </form>  
+  {% else %}
+  <div>Sign in to leave a comment</div>
+  {% endif %}
+</div>
+
+{% endblock %}

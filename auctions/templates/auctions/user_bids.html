@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+{% if bids %}
+<h2>My Bids</h2>
+
+{% for bid in bids %}
+<div class="listing">
+  <ul>
+    <li><a href="{% url 'listing_view' bid.listing_id.id %}">title: {{ bid.listing_id.title }}</a></li>
+    <li>bid: {{ bid.amount }}</li>
+  </ul>
+</div>
+{% endfor %}
+
+{% else %}
+<h2>No Bids Yet</h2>
+
+{% endif %}
+
+{% endblock %}

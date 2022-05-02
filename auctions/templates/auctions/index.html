@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+{% load custom_tags %}
+
+{% block body %}
+
+<h2>Active Listings</h2>
+
+{% for listing in listings %}
+<div class="listing">
+  <ul>
+    <li><a href="{% url 'listing_view' listing.id %}">title: {{ listing.title }}</a></li>    
+    <li>pricing: {% listing_bid listing %}</li>
+    <li>description: {{ listing.description }}</li>
+    <li>category: {{ listing.category }}</li>
+  </ul>
+</div>
+
+{% empty %}
+<div>Nothing here yet</div>
+
+{% endfor %}
+
+{% endblock %}
