@@ -3,32 +3,34 @@
 
 {% block body %}
 
-<h2>Listing</h2>
-
 
 <!-- Listing info -->
 <div class="listing">
-  <ul>
-    <li>title: {{ listing.title }}</li>    
-    
-    {% if listing.img_url %}
-    <img src="{{ listing.img_url }}" alt="{{ listing.title }}">
-    {% endif %}
+  <h2>{{ listing.title }}</h2>
 
-    <li>description: {{ listing.description }}</li>
-    
-    <li>category: {{ listing.category }}</li>
-    
-    {% if not listing.active %}
-    <li>status: Closed</li>
-    {% endif %}      
-  </ul>
+  {% if not listing.active %}
+  <div>status: Closed</div>
+  {% endif %}
+
+  {% if listing.img_url %}
+  <img src="{{ listing.img_url }}" alt="{{ listing.title }}">
+  {% endif %}
+
+  <div>
+    {{ listing.description }}
+  </div>
+  
+  {% if listing.category %}
+  <a class="category" href="{% url 'category_view' listing.category.id %}">
+    {{ listing.category.name }}
+  </a>
+  {% endif %}   
 </div>
 
 
 <!-- Owner controls -->
 {% if listing.user_id == request.user %}
-<div>
+<div class="d-flex">
   <form action="{% url 'listing_edit' listing.id %}" method="GET">
     <input type="submit" value="Edit">
   </form>
