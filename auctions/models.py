@@ -17,6 +17,7 @@ class Listing(models.Model):
     starting_bid = models.DecimalField(max_digits=11, decimal_places=2)
     current_bid = models.ManyToManyField('Bid')
     active = models.BooleanField(default=True)
+    closed = models.DateTimeField(null=True)
 
     def edit_form_data(self):
         return {
@@ -28,6 +29,7 @@ class Listing(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

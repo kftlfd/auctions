@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from datetime import datetime
 
 from .models import Listing, Bid, Comment, Category
 from .forms import EditListingForm, AddListingForm, CommentForm, BidForm
@@ -64,7 +65,7 @@ def listing_add(request):
             new_listing.save()
 
             messages.add_message(request, messages.SUCCESS, 'Listing added')
-            return redirect(reverse('user_listings'))
+            return redirect('listing_view', listing_id=new_listing.id)
         
         else:
             messages.add_message(request, messages.ERROR, 'Invalid form')
@@ -79,7 +80,7 @@ def listing_edit(request, listing_id):
 
     listing = Listing.objects.get(pk=listing_id)
     if not listing or listing.user_id != request.user:
-        return redirect(reverse('user_listings'))
+        return redirect('user_listings')
     form = EditListingForm(listing.edit_form_data())
 
     if request.method == 'POST':
@@ -88,7 +89,7 @@ def listing_edit(request, listing_id):
         if request.POST.get('delete'):
             listing.delete()
             messages.add_message(request, messages.SUCCESS, 'Listing deleted')
-            return redirect(reverse('user_listings'))
+            return redirect('user_listings')
 
         elif form.is_valid():
             listing.title = form.cleaned_data['title']
@@ -105,7 +106,7 @@ def listing_edit(request, listing_id):
                 listing.category = None
             listing.save()
             messages.add_message(request, messages.SUCCESS, 'Listing modified')
-            return redirect(reverse('listing_view', kwargs={'listing_id': listing_id}))
+            return redirect('listing_view', listing_id=listing_id)
 
         else:
             messages.add_message(request, messages.ERROR, 'Invalid form')
@@ -121,7 +122,7 @@ def listing_comment(request, listing_id):
     
     listing = Listing.objects.get(pk=listing_id)
     if not listing:
-        return redirect(reverse('index'))
+        return redirect('index')
 
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -240,11 +241,13 @@ def listing_status(request, listing_id):
 
         if request.POST.get('close'):
             listing.active = False
+            listing.closed = datetime.now()
             listing.save()
             messages.add_message(request, messages.SUCCESS, 'Listing closed')
 
         elif request.POST.get('open'):
             listing.active = True
+            listing.closed = None
             listing.save()
             messages.add_message(request, messages.SUCCESS, 'Listing opened')
 
