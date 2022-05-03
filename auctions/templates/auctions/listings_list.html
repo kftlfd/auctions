@@ -2,7 +2,7 @@
 
 <div class="row g-3">
   {% for listing in listings %}
-  <div class="card">
+  <div class="card {% if not listing.active %} listing-closed {% endif %}">
     <div class="row">
       {% if listing.img_url %}
       <div class="col-md-4 listing img">
@@ -21,8 +21,13 @@
             {{ listing.description }}
           </div>
           <div class="listing time">
-            {{ listing.time }}
+            Posted: {{ listing.time }}
           </div>
+          {% if listing.closed %}
+          <div class="listing time">
+            Closed: {{ listing.closed }}
+          </div>
+          {% endif %}
           {% if listing.category %}
           <a class="listing category" href="{% url 'category_view' listing.category.id %}">
             {{ listing.category.name }}

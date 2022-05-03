@@ -3,7 +3,7 @@
 
 {% block body %}
 
-<h2 class="d-flex flex-column-reverse flex-md-row justify-content-between">
+<h2 class="d-flex flex-column-reverse flex-md-row justify-content-between gap-2">
   <!-- Listing title -->
   <div class="d-flex flex-wrap align-items-center">
     {% if not listing.active %}
@@ -14,7 +14,7 @@
 
   <!-- Owner controls -->
   {% if listing.user_id == request.user %}
-  <div class="d-flex listing controls mb-3">
+  <div class="d-flex listing controls align-self-md-center">
     <form action="{% url 'listing_status' listing.id %}" method="POST">
     {% csrf_token %}
     {% if listing.active %}
@@ -31,11 +31,11 @@
 
   <!-- Watchlist button -->
   {% if request.user.is_authenticated and listing.user_id != request.user%}
-  <div class="d-flex listing controls mb-3">
+  <div class="d-flex listing controls align-self-md-center">
     <form action="{% url 'listing_watch' listing.id %}" method="POST">
       {% csrf_token %}
       {% if watching %}
-      <button class="btn btn-sm btn-primary" type="submit" name="remove" value="Remove from Watchlist">
+      <button class="btn btn-sm btn-primary watchlist-btn" type="submit" name="remove" value="Remove from Watchlist">
         <input class="form-check-input" type="checkbox" checked>
         Watchlist
       </button>
@@ -63,7 +63,7 @@
     </div>
     <div>
       <span class="description-tag">Listed by: </span>
-      <a>
+      <a href="{% url 'user_page' listing.user_id.id %}">
         {{ listing.user_id }}
       </a>
     </div>
@@ -90,7 +90,7 @@
     {% if current_bid.user_id == request.user %}
       <div>You are the winner!</div>
     {% else %}
-      <div>Winner: {{ current_bid.user_id }}</div>
+      <div>Winner: <a href="{% url 'user_page' current_bid.user_id.id %}">{{ current_bid.user_id }}</a></div>
     {% endif %}
   {% endif %}
 
@@ -143,9 +143,9 @@
   {% for comment in comments %}
   <div class="comment">
     <div class="d-flex flex-column flex-sm-row gap-3 align-items-center">
-      <div class="user">
+      <a class="user" href="{% url 'user_page' comment.user_id.id %}">
         {{ comment.user_id }}
-      </div>
+      </a>
       <div class="time">
         {{ comment.time }}
       </div>

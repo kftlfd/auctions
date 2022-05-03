@@ -6,7 +6,7 @@ def categories_all():
     return [ (c.id,c.name) for c in Category.objects.all() ]
 
 def categories_edit():
-    return [ (None, '-None-'), ('+', '-New-') ] + categories_all()
+    return [ (None, '-- None --'), ('+', '-- Suggest New --') ] + categories_all()
 
 def categories_search():
     return [ (None, 'Any'), ('none', 'None') ] + categories_all()
@@ -32,9 +32,17 @@ class EditListingForm(forms.Form):
     category = forms.ChoiceField(choices=categories_edit, required=False)
     category_new = forms.CharField(required=False)
 
+    title.widget.attrs.update({'class': 'form-control'})
+    description.widget.attrs.update({'class': 'form-control', 'rows': 3})
+    img_url.widget.attrs.update({'class': 'form-control'})
+    category.widget.attrs.update({'class': 'form-select'})
+    category_new.widget.attrs.update({'class': 'form-control'})
+
 
 class AddListingForm(EditListingForm):
     starting_bid = forms.DecimalField(min_value=0, max_digits=11, decimal_places=2)
+
+    starting_bid.widget.attrs.update({'class': 'form-control'})
 
 
 class CommentForm(forms.Form):
