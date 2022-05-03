@@ -3,136 +3,171 @@
 
 {% block body %}
 
+<h2 class="d-flex flex-column-reverse flex-md-row justify-content-between">
+  <!-- Listing title -->
+  <div class="d-flex flex-wrap align-items-center">
+    {% if not listing.active %}
+    <span class="status-label">Closed</span>
+    {% endif %}
+    {{ listing.title }}
+  </div>
 
-<!-- Listing info -->
-<div class="listing">
-  <h2>{{ listing.title }}</h2>
-
-  {% if not listing.active %}
-  <div>status: Closed</div>
+  <!-- Owner controls -->
+  {% if listing.user_id == request.user %}
+  <div class="d-flex listing controls mb-3">
+    <form action="{% url 'listing_status' listing.id %}" method="POST">
+    {% csrf_token %}
+    {% if listing.active %}
+    <input class="btn btn-danger" type="submit" name='close' value="Close">
+    {% else %}
+    <input class="btn btn-success" type="submit" name='open' value="Open">
+    {% endif %}
+    </form>
+    <form action="{% url 'listing_edit' listing.id %}" method="GET">
+      <input class="btn btn-primary" type="submit" value="Edit">
+    </form>
+  </div>
   {% endif %}
 
+  <!-- Watchlist button -->
+  {% if request.user.is_authenticated and listing.user_id != request.user%}
+  <div class="d-flex listing controls mb-3">
+    <form action="{% url 'listing_watch' listing.id %}" method="POST">
+      {% csrf_token %}
+      {% if watching %}
+      <button class="btn btn-sm btn-primary" type="submit" name="remove" value="Remove from Watchlist">
+        <input class="form-check-input" type="checkbox" checked>
+        Watchlist
+      </button>
+      {% else %}
+      <button class="btn btn-sm btn-secondary watchlist-btn" type="submit" name="add" value="Add to Watchlist">
+        <input class="form-check-input watchlist-check" type="checkbox">
+        Watchlist
+      </button>
+      {% endif %}
+    </form>
+  </div>
+  {% endif %}
+</h2>
+
+<!-- Listing details -->
+<div class="row mb-3">
   {% if listing.img_url %}
-  <img src="{{ listing.img_url }}" alt="{{ listing.title }}">
-  {% endif %}
-
-  <div>
-    {{ listing.description }}
+  <div class="col-md-5 grid-center">    
+    <img src="{{ listing.img_url }}" alt="{{ listing.title }}">
   </div>
-  
-  {% if listing.category %}
-  <a class="category" href="{% url 'category_view' listing.category.id %}">
-    {{ listing.category.name }}
-  </a>
-  {% endif %}   
+  {% endif %}
+  <div class="col-md">
+    <div class="mb-3">
+      {{ listing.description }}
+    </div>
+    <div>
+      <span class="description-tag">Listed by: </span>
+      <a>
+        {{ listing.user_id }}
+      </a>
+    </div>
+    {% if listing.category %}
+    <div>
+      <span class="description-tag">Category: </span>
+      <a href="{% url 'category_view' listing.category.id %}">
+        {{ listing.category.name }}
+      </a>
+    </div>
+    {% endif %}
+  </div>
 </div>
 
+<!-- Price and bids -->
+<div class="d-grid gap-1 mb-5">
+  <h3>{% listing_price listing %}</h3>
 
-<!-- Owner controls -->
-{% if listing.user_id == request.user %}
-<div class="d-flex">
-  <form action="{% url 'listing_edit' listing.id %}" method="GET">
-    <input type="submit" value="Edit">
-  </form>
-  
-  <form action="{% url 'listing_status' listing.id %}" method="POST">
-    {% csrf_token %}
-    {% if listing.active %}
-    <input type="submit" name='close' value="Close">
+  {% if listing.active %}
+  <div>{% bid_count listing %} bid(s) so far.</div>
+  {% endif %}
+    
+  {% if not listing.active and current_bid %}
+    {% if current_bid.user_id == request.user %}
+      <div>You are the winner!</div>
     {% else %}
-    <input type="submit" name='open' value="Open">
+      <div>Winner: {{ current_bid.user_id }}</div>
     {% endif %}
-  </form>
+  {% endif %}
 
+  {% if listing.user_id == request.user %}
   <form action="{% url 'listing_bids' listing.id %}" method="GET">
-    <input type="submit" value="All Bids">
-  </form>
-</div>
-{% endif %}
-
-
-<!-- Bids -->
-<div>
-  <div>
-    {% if listing.active %}
-      Current bid: 
-    {% else %}
-      Final bid:
-    {% endif %}
-
-    {% listing_bid listing %}
-
-    {% if current_bid %}
-      from {{ current_bid.user_id }}
-    {% endif %}
-  </div>
-
-  {% user_bid user listing as u_bid %}
-  {% if u_bid %}
-  <form action="{% url 'listing_bid' listing.id %}" method="POST">
-    {% csrf_token %}
-    <span>Your latest bid is: {{ u_bid }}</span>
-    <input type="submit" name='remove' value="Remove bid">
+    <input class="btn btn-primary" type="submit" value="Bids history">
   </form>
   {% endif %}
   
-  {% if listing.active and request.user.is_authenticated and listing.user_id != request.user%}
-  <form action="{% url 'listing_bid' listing.id %}" method="POST">
-    {% csrf_token %}
-    {{ form_bid.amount }}
-    <input type="submit" value="Make bid">
-  </form>
-  {% endif %}
-
-  {% if not listing.active and listing.current_bid and listing.current_bid.user_id == request.user %}
-  <div>Congrats, you won!</div>
-  {% endif %}
-
   {% if listing.active and not request.user.is_authenticated %}
   <div>Sign in to make a bid</div>
   {% endif %}
-</div>
-
-
-<!-- Watchlist -->
-{% if request.user.is_authenticated and listing.user_id != request.user%}
-<div>
-  <form action="{% url 'listing_watch' listing.id %}" method="POST">
-    {% csrf_token %}
-    {% if watching %}
-    <input type="submit" name="remove" value="Remove from Watchlist">
-    {% else %}
-    <input type="submit" name="add" value="Add to Watchlist">
+  
+  {% if request.user.is_authenticated and listing.active %}
+    {% user_bid user listing as u_bid %}
+    {% if u_bid %}
+    <form class="row gap-1 align-items-center" action="{% url 'listing_bid' listing.id %}" method="POST">
+      {% csrf_token %}
+      <div class="col-auto">
+        {% if current_bid.user_id == request.user %}
+        <span>Your bid is the current one.</span>
+        {% else %}
+        <span>Your latest bid is: {{ u_bid }}</span>
+        {% endif %}
+      </div>
+      <div class="col-auto">
+        <input class="btn btn-sm btn-danger" type="submit" name='remove' value="Remove offer">
+      </div>
+    </form>
     {% endif %}
+  {% endif %}
+  
+  {% if listing.active and request.user.is_authenticated and listing.user_id != request.user%}
+  <form class="row gap-1" action="{% url 'listing_bid' listing.id %}" method="POST">
+    {% csrf_token %}
+    <div class="col-auto">
+      {{ form_bid.amount }}
+    </div>
+    <div class="col-auto">
+      <input class="btn btn-primary" type="submit" value="Place bid">
+    </div>
   </form>
+  {% endif %}
 </div>
-{% endif %}
-
-
 
 <!-- Comments -->
 <div>
-  <h3>Comments</h3>
+  <h4 class="mb-3">Comments</h4>
   
-  <div>
-    {% for comment in comments %}
-    <div>
-      {{ comment.user_id }} |
-      {{ comment.content }} |
-      {{ comment.time }}
+  {% for comment in comments %}
+  <div class="comment">
+    <div class="d-flex flex-column flex-sm-row gap-3 align-items-center">
+      <div class="user">
+        {{ comment.user_id }}
+      </div>
+      <div class="time">
+        {{ comment.time }}
+      </div>
     </div>
-    {% endfor %}
+    <div class="content">
+      {{ comment.content }}
+    </div>
   </div>
+  {% endfor %}
     
   {% if request.user.is_authenticated %}
-  <form action="{% url 'listing_comment' listing.id %}" method="POST">
-    {% csrf_token %}
-    {{ form_comment.content }}
-    <input type="submit" value="Add comment">
-  </form>  
-  {% else %}
-  <div>Sign in to leave a comment</div>
-  {% endif %}
+  <div class="mt-3">
+    <form class="d-flex flex-column gap-1" action="{% url 'listing_comment' listing.id %}" method="POST">
+      {% csrf_token %}
+      {{ form_comment.content.label }}
+      {{ form_comment.content }}
+      <input class="btn btn-primary align-self-end" type="submit" value="Add comment">
+    </form>  
+    {% else %}
+    <div><a href="{% url 'login' %}">Sign in</a> to leave a comment</div>
+    {% endif %}
+  </div>
 </div>
 
 {% endblock %}

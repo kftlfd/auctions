@@ -85,6 +85,16 @@ body {
   border-radius: 0.25rem;
 }
 
+.watchlist-btn {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.25rem;
+}
+
+.watchlist-check {
+  background-color: #aaa;
+}
+
 .auth {
   margin-top: 5rem;
   display: grid;
@@ -103,41 +113,86 @@ body {
   gap: 0.5rem;
 }
 
-.listings-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-}
-.listings-grid .card {
-  min-width: 200px;
-  flex-grow: 1;
-}
-.listings-grid .listing.img {
+.listing.img {
   display: grid;
-  justify-content: center;
+  place-content: center;
 }
-.listings-grid .listing img {
-  max-width: 300px;
+.listing img {
   max-height: 300px;
 }
-.listings-grid .listing .title {
+.listing.title {
   display: block;
-  color: #339;
+  color: #333;
   text-decoration: none;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
+  font-weight: bold;
 }
-.listings-grid .listing .description {
+.listing.price {
+  font-size: 1.1rem;
+  color: #222;
+  margin-bottom: 0.8rem;
+}
+.listing.description {
+  color: #444;
+}
+.listing.time {
   color: #555;
-}
-.listings-grid .listing .category {
-  color: #66b;
   font-size: 0.9rem;
 }
-.listings-grid .listing .price {
-  font-size: 1.1rem;
-  font-weight: bold;
+.listing.category {
+  display: block;
+  font-size: 0.9rem;
+  margin-top: 0.8rem;
+}
+.listing.controls {
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-left: 2rem;
+}
+
+.status-label {
+  display: inline-block;
+  align-self: center;
+  background-color: #777;
+  border-radius: 0.25rem;
+  color: #fff;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.description-tag {
+  font-size: 0.9rem;
+  color: #444;
+}
+.description-tag + .description-tag {
+  margin-top: 0.5rem;
+}
+
+.grid-center {
+  display: grid;
+  place-content: center;
+}
+
+.comment {
+  padding: 1rem 0;
+}
+.comment + .comment {
+  border-top: 1px solid #ccc;
+}
+.comment .user {
+  display: inline-block;
+  padding: 0 1rem;
+  color: #333;
+  border: 1px solid #eee;
+  border-radius: 0.25rem;
+}
+.comment .time {
+  color: #777;
+  font-size: 0.8rem;
+}
+.comment .content {
+  padding: 0.5rem 1rem 0;
 }
 
 /*# sourceMappingURL=styles.css.map */

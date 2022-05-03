@@ -9,9 +9,9 @@ from .forms import EditListingForm, AddListingForm, CommentForm, BidForm
 
 def listing_view(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
-    comments = Comment.objects.filter(listing_id=listing)
+    comments = Comment.objects.filter(listing_id=listing).order_by('-id')
     
-    current_bid = listing.current_bid.order_by('amount').reverse()
+    current_bid = listing.current_bid.order_by('-amount')
     if current_bid:
         current_bid = current_bid[0]
         bid = current_bid.amount

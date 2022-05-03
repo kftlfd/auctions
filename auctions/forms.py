@@ -38,8 +38,12 @@ class AddListingForm(EditListingForm):
 
 
 class CommentForm(forms.Form):
-    content = forms.CharField(widget=forms.Textarea)
+    content = forms.CharField(label='Add new comment:', widget=forms.Textarea)
+
+    content.widget.attrs.update({'class': 'form-control', 'rows': 3})
 
 
 class BidForm(forms.Form):
     amount = forms.DecimalField(min_value=0, max_digits=11, decimal_places=2)
+
+    amount.widget.attrs.update({'class': 'form-control'})

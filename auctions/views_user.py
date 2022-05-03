@@ -7,8 +7,9 @@ from .models import Listing, Bid, Comment
 @login_required
 def user_listings(request):
     context = {
-        'listings': Listing.objects.filter(user_id=request.user)}
-    return render(request, "auctions/user_listings.html", context)
+        'header': 'Your Listings',
+        'listings': Listing.objects.filter(user_id=request.user).order_by('-id')}
+    return render(request, "auctions/listings.html", context)
 
 
 @login_required
@@ -33,12 +34,13 @@ def user_bids(request):
 @login_required
 def user_comments(request):
     context = {
-        'comments': Comment.objects.filter(user_id=request.user)}
+        'comments': Comment.objects.filter(user_id=request.user).order_by('-id')}
     return render(request, "auctions/user_comments.html", context)
 
 
 @login_required
 def user_watchlist(request):
     context = {
-        'watchlist': request.user.watchlist.all()}
-    return render(request, 'auctions/user_watchlist.html', context)
+        'header': 'Watchlist',
+        'listings': request.user.watchlist.order_by('-id')}
+    return render(request, 'auctions/listings.html', context)

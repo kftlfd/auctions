@@ -2,19 +2,12 @@
 
 {% block body %}
 
-<h2>Search</h2>
-
-<form action="{% url 'search' %}" method="GET">
-  {{ form }}
-  <input type="submit" value="Search">
-</form>
-
-<hr>
+<h2>{{ header }}</h2>
 
 {% if listings %}
   {% include "auctions/listings_list.html" %}
 {% else %}
-  <div>No results</div>
+  <div>Nothing here yet</div>
 {% endif %}
 
 {% endblock %}

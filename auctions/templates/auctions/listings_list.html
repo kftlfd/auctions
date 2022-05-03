@@ -1,0 +1,36 @@
+{% load custom_tags %}
+
+<div class="row g-3">
+  {% for listing in listings %}
+  <div class="card">
+    <div class="row">
+      {% if listing.img_url %}
+      <div class="col-md-4 listing img">
+        <a href="{% url 'listing_view' listing.id %}">
+          <img src="{{ listing.img_url }}" alt="{{ listing.title }}">
+        </a>
+      </div>
+      {% endif %}
+      <div class="col-md">
+        <div class="card-body">
+          <a class="listing title" href="{% url 'listing_view' listing.id %}">{{ listing.title }}</a>
+          <div class="listing price">
+            {% listing_price listing %}
+          </div>
+          <div class="listing description">
+            {{ listing.description }}
+          </div>
+          <div class="listing time">
+            {{ listing.time }}
+          </div>
+          {% if listing.category %}
+          <a class="listing category" href="{% url 'category_view' listing.category.id %}">
+            {{ listing.category.name }}
+          </a>
+          {% endif %}        
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>

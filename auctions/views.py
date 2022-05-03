@@ -10,12 +10,13 @@ from .forms import SearchForm
 
 def index(request):
     context = {
-        'listings': Listing.objects.filter(active=True)}
-    return render(request, "auctions/index.html", context)
+        'header': 'Active Listings',
+        'listings': Listing.objects.filter(active=True).order_by('-id')}
+    return render(request, "auctions/listings.html", context)
 
 
 def search(request):
-    listings = Listing.objects.all()
+    listings = Listing.objects.order_by('-id')
     form_vals = {}
 
     title = request.GET.get('title', None)
@@ -38,7 +39,7 @@ def search(request):
     if recency:
         form_vals['recency'] = recency
         if recency == 'old':
-            listings = listings.order_by('id').reverse()
+            listings = listings.order_by('time')
 
     context = {
         'form': SearchForm(form_vals),
@@ -49,14 +50,14 @@ def search(request):
 def category_list(request):
     context = {
         'categories': Category.objects.all()}
-    return render(request, "auctions/category_list.html", context)
+    return render(request, "auctions/categories.html", context)
 
 
 def category_view(request, category_id):
     category = Category.objects.get(id=category_id)
-    listings = Listing.objects.filter(category=category)
+    listings = Listing.objects.filter(category=category).order_by('-id')
 
     context = {
-        'category': category,
+        'header': category.name,
         'listings': listings}
-    return render(request, "auctions/category_view.html", context)
+    return render(request, "auctions/listings.html", context)

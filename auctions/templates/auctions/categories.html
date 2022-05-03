@@ -2,18 +2,20 @@
 
 {% block body %}
 
-<h2>Categories</h2>
+<h2>All Categories</h2>
 
+{% if categories %}
 <ul>
-{% for category in categories %}
+  {% for category in categories %}
   <li>
     <a href="{% url 'category_view' category.id %}">
       {{ category.name }}
     </a>
   </li>
-{% empty %}
-  <span>Nothing here yet</span>
-{% endfor %}
+  {% endfor %}
 </ul>
+{% else %}
+  <div>Nothing here yet</div>
+{% endif %}
 
 {% endblock %}

@@ -64,6 +64,8 @@ body {
   border-radius: .25rem;
   background-color: #fff;
 }
+
+
 .watchlist-link {
   display: flex;
   justify-content: space-between;
@@ -78,6 +80,14 @@ body {
   text-align: center;
   font-size: 0.7rem;
   border-radius: 0.25rem;
+}
+.watchlist-btn {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.25rem;
+}
+.watchlist-check {
+  background-color: #aaa;
 }
 
 
@@ -97,49 +107,97 @@ body {
   gap: 0.5rem;
 }
 
-
-.listings-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-
-  .card {
-    min-width: 200px;
-    flex-grow: 1;
+  
+.listing {
+  &.img {
+    display: grid;
+    place-content: center;
+  }
+  img {
+    max-height: 300px;
   }
   
-  .listing {
-    &.img {
-      display: grid;
-      justify-content: center;
-    }
-    
-    img {
-      max-width: 300px;
-      max-height: 300px;
-    }
-    
-    .title {
-      display: block;
-      color: #339;
-      text-decoration: none;
-      font-size: 1.3rem;
-    }
+  &.title {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
 
-    .description {
-      color: #555;
-    }
-    
-    .category {
-      color: #66b;
-      font-size: 0.9rem;
-    }
-    
-    .price {
-      font-size: 1.1rem;
-      font-weight: bold;
-    }
+  &.price {
+    font-size: 1.1rem;
+    color: #222;
+    margin-bottom: 0.8rem;
+  }
+
+  &.description {
+    color: #444;
+  }
+
+  &.time {
+    color: #555;
+    font-size: 0.9rem;
+  }
+  
+  &.category {
+    display: block;
+    font-size: 0.9rem;
+    margin-top: 0.8rem;
+  } 
+
+  &.controls {
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-left: 2rem;
+  }
+}
+
+.status-label {
+  display: inline-block;
+  align-self: center;
+  background-color: #777;
+  border-radius: 0.25rem;
+  color: #fff;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.description-tag {
+  font-size: 0.9rem;
+  color: #444;
+
+  +.description-tag {
+    margin-top: 0.5rem;
+  }
+}
+
+.grid-center {
+  display: grid;
+  place-content: center;
+}
+
+.comment {
+  padding: 1rem 0;
+
+  +.comment {
+    border-top: 1px solid #ccc;
+  }
+  .user {
+    display: inline-block;
+    padding: 0 1rem;
+    color: #333;
+    border: 1px solid #eee;
+    border-radius: 0.25rem;
+  }
+
+  .time {
+    color: #777;
+    font-size: 0.8rem;
+  }
+
+  .content {
+    padding: 0.5rem 1rem 0;
   }
 }

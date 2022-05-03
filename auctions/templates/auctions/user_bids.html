@@ -1,4 +1,5 @@
 {% extends "auctions/layout.html" %}
+{% load custom_tags %}
 
 {% block body %}
 
@@ -9,7 +10,21 @@
 <div class="listing">
   <ul>
     <li><a href="{% url 'listing_view' bid.listing_id.id %}">title: {{ bid.listing_id.title }}</a></li>
-    <li>bid: {{ bid.amount }}</li>
+    <li>Current price: {% listing_price bid.listing_id %}</li>
+    {% listing_top_bidder bid.listing_id as bidder %}    
+    {% if bid.listing_id.active %}
+      {% if bidder == user %}
+      <li>Your bid is the top one.</li>
+      {% else %}
+      <li>Your offer: {{ bid.amount|usd }}</li>
+      {% endif %}
+    {% else %}
+      {% if bidder == user %}
+      <li>You won!</li>
+      {% else %}
+      <li>Closed</li>
+      {% endif %}
+    {% endif %}
   </ul>
 </div>
 {% endfor %}
