@@ -15,6 +15,22 @@ def index(request):
     return render(request, "auctions/listings.html", context)
 
 
+def category_list(request):
+    context = {
+        'categories': Category.objects.order_by('name')}
+    return render(request, "auctions/categories.html", context)
+
+
+def category_view(request, category_id):
+    category = Category.objects.get(id=category_id)
+    listings = Listing.objects.filter(category=category, active=True).order_by('-id')
+
+    context = {
+        'header': category.name,
+        'listings': listings}
+    return render(request, "auctions/listings.html", context)
+
+
 def search(request):
     listings = Listing.objects.order_by('-id')
     form_vals = {}
@@ -45,19 +61,3 @@ def search(request):
         'form': SearchForm(form_vals),
         'listings': listings}
     return render(request, "auctions/search.html", context)
-
-
-def category_list(request):
-    context = {
-        'categories': Category.objects.all()}
-    return render(request, "auctions/categories.html", context)
-
-
-def category_view(request, category_id):
-    category = Category.objects.get(id=category_id)
-    listings = Listing.objects.filter(category=category).order_by('-id')
-
-    context = {
-        'header': category.name,
-        'listings': listings}
-    return render(request, "auctions/listings.html", context)

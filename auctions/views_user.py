@@ -1,7 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from .models import Listing, Bid, Comment
+from .models import User, Listing, Bid, Comment
+
+
+def user_page(request, user_id):
+    user = User.objects.filter(pk=user_id)
+    context = {
+        'header': user[0] if user else None,
+        'listings': Listing.objects.filter(user_id=user[0]).order_by('-id')} if user else None
+    return render(request, "auctions/listings.html", context)
 
 
 @login_required
