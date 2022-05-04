@@ -1,13 +1,28 @@
+// *************** Logo ***************
 @import url('https://fonts.googleapis.com/css2?family=Beau+Rivage&display=swap');
-.brand-logo {
+.logo {
   font-family: 'Beau Rivage', cursive;
   text-align: center;
   font-size: 5rem;
+  color: #002255;
   margin: 0;
   user-select: none;
 }
 
 
+
+// *************** Utils ***************
+.flex-grow {
+  flex-grow: 1;
+}
+.grid-center {
+  display: grid;
+  place-content: center;
+}
+
+
+
+// *************** Main ***************
 body {
   width: min(100%, 900px);
   min-height: 100vh;
@@ -26,6 +41,27 @@ body {
 }
 
 
+
+// *************** Auth ***************
+.auth {
+  margin-top: 5rem;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.auth h2 {
+  text-align: center;
+}
+.auth form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+
+
+// *************** Alerts ***************
 .messages {
   position: fixed;
   z-index: 100;
@@ -40,15 +76,14 @@ body {
 }
 
 
+
+// *************** Navbar ***************
 .nav-item > .nav-link {
   padding-inline: 0.75rem;
 }
 .navbar-nav {
   width: 100%;
   gap: 0.5rem;
-}
-.flex-grow {
-  flex-grow: 1;
 }
 .nav-search {
   width: auto;
@@ -67,6 +102,8 @@ body {
 }
 
 
+
+// *************** Watchlist ***************
 .watchlist-link {
   display: flex;
   justify-content: space-between;
@@ -92,23 +129,8 @@ body {
 }
 
 
-.auth {
-  margin-top: 5rem;
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-.auth h2 {
-  text-align: center;
-}
-.auth form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
 
-  
+// *************** Listings ***************
 .listing {
   &.img {
     display: grid;
@@ -116,6 +138,10 @@ body {
   }
   img {
     max-height: 300px;
+    max-width: 100%;
+  }
+  &.img.full img {
+    max-height: 100%;
   }
   
   &.title {
@@ -124,12 +150,13 @@ body {
     text-decoration: none;
     font-size: 1.4rem;
     font-weight: bold;
+    margin-bottom: 0.5rem;
   }
 
   &.price {
     font-size: 1.1rem;
     color: #222;
-    margin-bottom: 0.8rem;
+    margin-bottom: 1rem;
   }
 
   &.description {
@@ -139,12 +166,13 @@ body {
   &.time {
     color: #555;
     font-size: 0.9rem;
+    margin-top: 0.5rem;
   }
   
   &.category {
     display: block;
     font-size: 0.9rem;
-    margin-top: 0.8rem;
+    margin-top: 0.5rem;
   } 
 
   &.controls {
@@ -153,37 +181,20 @@ body {
     margin-left: 2rem;
   }
 }
-
-.listing-closed {
-  background-color: #f9f9f9;
-  opacity: 0.5;
-}
-
-.status-label {
-  display: inline-block;
-  align-self: center;
-  background-color: #777;
-  border-radius: 0.25rem;
-  color: #fff;
-  font-size: 1rem;
-  padding: 0.25rem 0.5rem;
-  margin-right: 0.5rem;
-}
-
 .description-tag {
   font-size: 0.9rem;
   color: #444;
-
-  +.description-tag {
-    margin-top: 0.5rem;
-  }
+}
+.listing-closed {
+  background-color: rgba($color: #eee, $alpha: 0.8);
+}
+.listing-won {
+  background-color: rgba($color: #0f0, $alpha: 0.2);
 }
 
-.grid-center {
-  display: grid;
-  place-content: center;
-}
 
+
+// *************** Comments ***************
 .comment {
   padding: 1rem 0;
 
@@ -206,5 +217,45 @@ body {
 
   .content {
     padding: 0.5rem 1rem 0;
+  }
+}
+
+
+
+// *************** Categories ***************
+.categories {
+  font-size: 1.2rem;
+
+  li {
+    line-height: 2.5rem;
+  }
+
+  li::marker {
+    color: #002255;
+  }
+}
+
+
+
+// Bids
+.callout {
+  padding: 1rem;
+  margin-top: 0.5rem;
+  border: 1px solid #e9ecef;
+  border-left-width: .25rem;
+  border-radius: .25rem;
+
+  &:first-of-type {
+    border-left-color: rgba($color: #0f0, $alpha: 0.2);
+  }
+  
+  &.callout-danger {
+    border-left-color: #d9534f;
+    background-color: rgba($color: #eee, $alpha: 0.8);
+    opacity: 0.6;
+  }
+
+  &.callout-info {
+    border-left-color: #5bc0de;
   }
 }

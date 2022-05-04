@@ -3,34 +3,66 @@
 
 {% block body %}
 
-{% if bids %}
 <h2>My Bids</h2>
 
-{% for bid in bids %}
-<div class="listing">
-  <ul>
-    <li><a href="{% url 'listing_view' bid.listing_id.id %}">title: {{ bid.listing_id.title }}</a></li>
-    <li>Current price: {% listing_price bid.listing_id %}</li>
-    {% listing_top_bidder bid.listing_id as bidder %}    
-    {% if bid.listing_id.active %}
-      {% if bidder == user %}
-      <li>Your bid is the top one.</li>
-      {% else %}
-      <li>Your offer: {{ bid.amount|usd }}</li>
+{% if bids %}
+<div class="row g-3">
+  {% for bid in bids %}
+  {% listing_top_bid bid.listing_id as top_bid %}    
+  <div class="card {% if not bid.listing_id.active %} listing-closed {% if top_bid.user_id == user%} listing-won {% endif %} {% endif %}">
+    <div class="row">
+
+      {% if listing.img_url %}
+      <div class="col-md-4 listing img">
+        <a href="{% url 'listing_view' bid.listing_id.id %}">
+          <img src="{{ bid.listing_id.img_url }}" alt="{{ bid.listing_id.title }}">
+        </a>
+      </div>
       {% endif %}
-    {% else %}
-      {% if bidder == user %}
-      <li>You won!</li>
-      {% else %}
-      <li>Closed</li>
-      {% endif %}
-    {% endif %}
-  </ul>
+
+      <div class="col-md">
+        <div class="card-body">
+          
+          <a class="listing title" href="{% url 'listing_view' bid.listing_id.id %}">
+            {% if not bid.listing_id.active %}
+              {% if top_bid.user_id == user %}
+              <span class="badge bg-success">You won!</span>
+              {% else %}
+              <span class="badge bg-secondary">Closed</span>
+              {% endif %}
+            {% endif %}
+            <span>{{ bid.listing_id.title }}</span>
+          </a>
+          
+          <div class="listing price">
+            {% listing_price bid.listing_id %}
+          </div>
+
+          {% if bid.listing_id.active %}
+          <div>
+            {% if top_bid.user_id == user %}
+            <span>Your bid is the top one.</span>
+            {% else %}
+            <span>Your offer: {{ bid.amount|usd }}</span>
+            {% endif %}
+            </div>
+          {% endif %}
+
+          {% if bid.listing_id.closed %}
+          <div class="listing time">
+            Closed: {{ bid.listing_id.closed }}
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
 </div>
-{% endfor %}
 
 {% else %}
-<h2>No Bids Yet</h2>
+<div>No Bids Yet</div>
 
 {% endif %}
 

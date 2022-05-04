@@ -3,29 +3,25 @@
 
 {% block body %}
 
-<h2>Bids</h2>
-<h4>{{ listing.title }}</h4>
+<h2>Bids: <a href="{% url 'listing_view' listing.id %}">{{ listing.title }}</a></h2>
 
-<div class="listing">
-  {% for bid in bids %}
-  <ul>
+{% for bid in bids %}
+<div class="callout {% if not bid.available %} callout-danger {% endif %}">
+  <div>
     {% if not bid.available %}
-    <li><strong>Removed</strong></li>
+    <span class="badge bg-danger">Removed</span>
     {% endif %}
-
-    <li>{{ bid.amount|usd }}</li>
-    <li>from: {{ bid.user_id }}</li>
-    <li>{{ bid.time }}</li>
-  </ul>
-  {% empty %}
-  <div>No bids yet</div>
-  {% endfor %}
+    {{ bid.amount|usd }}
+  </div>
+  <div><span class="description-tag">from:</span> <a href="{% url 'user_page' bid.user_id.id %}">{{ bid.user_id }}</a></div>
+  <div><span class="description-tag">{{ bid.time }}</span></div>
 </div>
 
-<h4>starting bid: {{ listing.starting_bid }}</h4>
+{% empty %}
+<div>No bids yet</div>
 
-<form action="{% url 'listing_view' listing.id %}" method="GET">
-  <input type="submit" value="Back to listing">
-</form>
+{% endfor %}
+
+<div class="callout callout-info">Starting bid: {{ listing.starting_bid|usd }}</div>
 
 {% endblock %}

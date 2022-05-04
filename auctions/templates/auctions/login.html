@@ -6,7 +6,7 @@
 
   <h2>Login</h2>
   
-  <form action="{% url 'login' %}" method="post">
+  <form action="{% url 'login' %}?next={{ request.GET.next }}" method="post">
     {% csrf_token %}
     <div class="form-group">
       <input autofocus class="form-control" type="text" name="username" placeholder="Username">

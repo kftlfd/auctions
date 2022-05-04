@@ -14,31 +14,31 @@
   </div>
 
   <div class="row mb-3">
-    <label for="id_title" class="col-sm-2 col-form-label">Description</label>
+    <label for="id_description" class="col-sm-2 col-form-label">Description</label>
     <div class="col-sm-10">{{ form.description }}</div>
     <div class="col">{{ form.description.errors }}</div>
   </div>
 
   <div class="row mb-3">
-    <label for="id_title" class="col-sm-2 col-form-label">Image URL</label>
+    <label for="id_img_url" class="col-sm-2 col-form-label">Image URL</label>
     <div class="col-sm-10">{{ form.img_url }}</div>
     <div class="col">{{ form.img_url.errors }}</div>
   </div>
 
   <div class="row mb-3">
-    <label for="id_title" class="col-sm-2 col-form-label">Starting bid</label>
+    <label for="id_starting_bid" class="col-sm-2 col-form-label">Starting bid</label>
     <div class="col-sm-10">{{ form.starting_bid }}</div>
     <div class="col">{{ form.starting_bid.errors }}</div>
   </div>
 
   <div class="row mb-3">
-    <label for="id_title" class="col-sm-2 col-form-label">Category</label>
+    <label for="id_category" class="col-sm-2 col-form-label">Category</label>
     <div class="col-sm-10">{{ form.category }}</div>
     <div class="col">{{ form.category.errors }}</div>
   </div>
 
-  <div class="row mb-3 collapse" id="id_category_new">
-    <label for="id_title" class="col-sm-2 col-form-label">Suggest new category</label>
+  <div class="row mb-3 collapse" id="id_category_inp">
+    <label for="id_category_new" class="col-sm-2 col-form-label">Suggest new category</label>
     <div class="col-sm-10">{{ form.category_new }}</div>
     <div class="col">{{ form.category_new.errors }}</div>
   </div>
@@ -48,7 +48,7 @@
 
 <script>
   const categorySelect = document.querySelector('#id_category');
-  const categoryInput = document.querySelector('#id_category_new');
+  const categoryInput = document.querySelector('#id_category_inp');
   const bsCollapse = new bootstrap.Collapse(categoryInput, {
     toggle: false
   })

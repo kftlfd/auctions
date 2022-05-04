@@ -2,7 +2,9 @@
 
 <div class="row g-3">
   {% for listing in listings %}
-  <div class="card {% if not listing.active %} listing-closed {% endif %}">
+  {% listing_top_bid listing as top_bid %}    
+
+  <div class="card {% if not listing.active %} listing-closed {% if top_bid.user_id == user %} listing-won {% endif %} {% endif %}">
     <div class="row">
       {% if listing.img_url %}
       <div class="col-md-4 listing img">
@@ -13,7 +15,16 @@
       {% endif %}
       <div class="col-md">
         <div class="card-body">
-          <a class="listing title" href="{% url 'listing_view' listing.id %}">{{ listing.title }}</a>
+          <a class="listing title" href="{% url 'listing_view' listing.id %}">
+            {% if not listing.active %}
+              {% if top_bid.user_id == user %}
+              <span class="badge bg-success">You won!</span>
+              {% else %}
+              <span class="badge bg-secondary">Closed</span>
+              {% endif %}
+            {% endif %}
+            <span>{{ listing.title }}</span>
+          </a>
           <div class="listing price">
             {% listing_price listing %}
           </div>
@@ -29,10 +40,12 @@
           </div>
           {% endif %}
           {% if listing.category %}
+          {% if listing.category.approved %}
           <a class="listing category" href="{% url 'category_view' listing.category.id %}">
             {{ listing.category.name }}
           </a>
-          {% endif %}        
+          {% endif %}
+          {% endif %}
         </div>
       </div>
     </div>

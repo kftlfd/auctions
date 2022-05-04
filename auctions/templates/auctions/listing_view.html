@@ -5,16 +5,16 @@
 
 <h2 class="d-flex flex-column-reverse flex-md-row justify-content-between gap-2">
   <!-- Listing title -->
-  <div class="d-flex flex-wrap align-items-center">
+  <div>
     {% if not listing.active %}
-    <span class="status-label">Closed</span>
+    <span class="badge bg-secondary">Closed</span>
     {% endif %}
-    {{ listing.title }}
+    <span>{{ listing.title }}</span>
   </div>
 
   <!-- Owner controls -->
   {% if listing.user_id == request.user %}
-  <div class="d-flex listing controls align-self-md-center">
+  <div class="d-flex listing controls">
     <form action="{% url 'listing_status' listing.id %}" method="POST">
     {% csrf_token %}
     {% if listing.active %}
@@ -31,7 +31,7 @@
 
   <!-- Watchlist button -->
   {% if request.user.is_authenticated and listing.user_id != request.user%}
-  <div class="d-flex listing controls align-self-md-center">
+  <div class="d-flex listing controls">
     <form action="{% url 'listing_watch' listing.id %}" method="POST">
       {% csrf_token %}
       {% if watching %}
@@ -50,89 +50,98 @@
   {% endif %}
 </h2>
 
-<!-- Listing details -->
-<div class="row mb-3">
+<div class="row mb-5">
   {% if listing.img_url %}
-  <div class="col-md-5 grid-center">    
+  <!-- Listing image -->
+  <div class="col-md-5 listing img full">    
     <img src="{{ listing.img_url }}" alt="{{ listing.title }}">
   </div>
   {% endif %}
+
+  <!-- Price and bids -->
   <div class="col-md">
-    <div class="mb-3">
-      {{ listing.description }}
+    <div class="d-grid gap-1">
+      <h3>{% listing_price listing %}</h3>
+
+      {% if listing.active %}
+      <div>{% bid_count listing %} bid(s) so far.</div>
+      {% endif %}
+        
+      {% if not listing.active and current_bid %}
+        {% if current_bid.user_id == request.user %}
+          <div>You are the winner!</div>
+        {% else %}
+          <div>Winner: <a href="{% url 'user_page' current_bid.user_id.id %}">{{ current_bid.user_id }}</a></div>
+        {% endif %}
+      {% endif %}
+
+      {% if listing.user_id == request.user %}
+      <form action="{% url 'listing_bids' listing.id %}" method="GET">
+        <input class="btn btn-primary" type="submit" value="Bids history">
+      </form>
+      {% endif %}
+      
+      {% if listing.active and not request.user.is_authenticated %}
+      <div><a href="{% url 'login' %}?next={{ request.META.PATH_INFO }}">Sign in</a> to make a bid</div>
+      {% endif %}
+      
+      {% if request.user.is_authenticated %}
+        {% user_bid user listing as u_bid %}
+        {% if u_bid %}
+        <form class="row gap-1 align-items-center" action="{% url 'listing_bid' listing.id %}" method="POST">
+          {% csrf_token %}
+          {% if listing.active %}
+          <div class="col-auto">
+            {% if current_bid.user_id == request.user %}
+            <span>Your bid is the current one.</span>
+            {% else %}
+            <span>Your latest bid is: {{ u_bid }}</span>
+            {% endif %}
+          </div>
+          {% endif %}
+          <div class="col-auto">
+            <input class="btn btn-sm btn-danger" type="submit" name='remove' value="Remove offer">
+          </div>
+        </form>
+        {% endif %}
+      {% endif %}
+      
+      {% if listing.active and request.user.is_authenticated and listing.user_id != request.user%}
+      <form class="row gap-1" action="{% url 'listing_bid' listing.id %}" method="POST">
+        {% csrf_token %}
+        <div class="col-auto">
+          {{ form_bid.amount }}
+        </div>
+        <div class="col-auto">
+          <input class="btn btn-primary" type="submit" value="Place bid">
+        </div>
+      </form>
+      {% endif %}
     </div>
-    <div>
-      <span class="description-tag">Listed by: </span>
-      <a href="{% url 'user_page' listing.user_id.id %}">
-        {{ listing.user_id }}
-      </a>
-    </div>
-    {% if listing.category %}
-    <div>
-      <span class="description-tag">Category: </span>
-      <a href="{% url 'category_view' listing.category.id %}">
-        {{ listing.category.name }}
-      </a>
-    </div>
-    {% endif %}
   </div>
 </div>
 
-<!-- Price and bids -->
-<div class="d-grid gap-1 mb-5">
-  <h3>{% listing_price listing %}</h3>
-
-  {% if listing.active %}
-  <div>{% bid_count listing %} bid(s) so far.</div>
-  {% endif %}
-    
-  {% if not listing.active and current_bid %}
-    {% if current_bid.user_id == request.user %}
-      <div>You are the winner!</div>
+<!-- Listing details -->
+<div class="mb-5">
+  <h4>Listing Details</h4>
+  <div class="mb-3">
+    {{ listing.description }}
+  </div>
+  <div>
+    <span class="description-tag">Listed by: </span>
+    <a href="{% url 'user_page' listing.user_id.id %}">
+      {{ listing.user_id }}
+    </a>
+  </div>
+  {% if listing.category %}
+  <div>
+    <span class="description-tag">Category: </span>
+    {% if listing.category.approved %}
+    <a href="{% url 'category_view' listing.category.id %}">{{ listing.category.name }}</a>
     {% else %}
-      <div>Winner: <a href="{% url 'user_page' current_bid.user_id.id %}">{{ current_bid.user_id }}</a></div>
+    {{ listing.category.name }}
     {% endif %}
-  {% endif %}
-
-  {% if listing.user_id == request.user %}
-  <form action="{% url 'listing_bids' listing.id %}" method="GET">
-    <input class="btn btn-primary" type="submit" value="Bids history">
-  </form>
-  {% endif %}
-  
-  {% if listing.active and not request.user.is_authenticated %}
-  <div>Sign in to make a bid</div>
-  {% endif %}
-  
-  {% if request.user.is_authenticated and listing.active %}
-    {% user_bid user listing as u_bid %}
-    {% if u_bid %}
-    <form class="row gap-1 align-items-center" action="{% url 'listing_bid' listing.id %}" method="POST">
-      {% csrf_token %}
-      <div class="col-auto">
-        {% if current_bid.user_id == request.user %}
-        <span>Your bid is the current one.</span>
-        {% else %}
-        <span>Your latest bid is: {{ u_bid }}</span>
-        {% endif %}
-      </div>
-      <div class="col-auto">
-        <input class="btn btn-sm btn-danger" type="submit" name='remove' value="Remove offer">
-      </div>
-    </form>
-    {% endif %}
-  {% endif %}
-  
-  {% if listing.active and request.user.is_authenticated and listing.user_id != request.user%}
-  <form class="row gap-1" action="{% url 'listing_bid' listing.id %}" method="POST">
-    {% csrf_token %}
-    <div class="col-auto">
-      {{ form_bid.amount }}
-    </div>
-    <div class="col-auto">
-      <input class="btn btn-primary" type="submit" value="Place bid">
-    </div>
-  </form>
+  </div>
   {% endif %}
 </div>
 
@@ -165,7 +174,7 @@
       <input class="btn btn-primary align-self-end" type="submit" value="Add comment">
     </form>  
     {% else %}
-    <div><a href="{% url 'login' %}">Sign in</a> to leave a comment</div>
+    <div><a href="{% url 'login' %}?next={{ request.META.PATH_INFO }}">Sign in</a> to leave a comment</div>
     {% endif %}
   </div>
 </div>

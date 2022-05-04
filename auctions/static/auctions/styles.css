@@ -1,10 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Beau+Rivage&display=swap");
-.brand-logo {
+.logo {
   font-family: "Beau Rivage", cursive;
   text-align: center;
   font-size: 5rem;
+  color: #002255;
   margin: 0;
   user-select: none;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.grid-center {
+  display: grid;
+  place-content: center;
 }
 
 body {
@@ -22,6 +32,24 @@ body {
 }
 .main h2 {
   margin-bottom: 1rem;
+}
+
+.auth {
+  margin-top: 5rem;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.auth h2 {
+  text-align: center;
+}
+
+.auth form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .messages {
@@ -45,10 +73,6 @@ body {
 .navbar-nav {
   width: 100%;
   gap: 0.5rem;
-}
-
-.flex-grow {
-  flex-grow: 1;
 }
 
 .nav-search {
@@ -96,30 +120,16 @@ body {
   background-color: #aaa;
 }
 
-.auth {
-  margin-top: 5rem;
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-
-.auth h2 {
-  text-align: center;
-}
-
-.auth form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
 .listing.img {
   display: grid;
   place-content: center;
 }
 .listing img {
   max-height: 300px;
+  max-width: 100%;
+}
+.listing.img.full img {
+  max-height: 100%;
 }
 .listing.title {
   display: block;
@@ -127,11 +137,12 @@ body {
   text-decoration: none;
   font-size: 1.4rem;
   font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 .listing.price {
   font-size: 1.1rem;
   color: #222;
-  margin-bottom: 0.8rem;
+  margin-bottom: 1rem;
 }
 .listing.description {
   color: #444;
@@ -139,11 +150,12 @@ body {
 .listing.time {
   color: #555;
   font-size: 0.9rem;
+  margin-top: 0.5rem;
 }
 .listing.category {
   display: block;
   font-size: 0.9rem;
-  margin-top: 0.8rem;
+  margin-top: 0.5rem;
 }
 .listing.controls {
   justify-content: flex-end;
@@ -151,33 +163,17 @@ body {
   margin-left: 2rem;
 }
 
-.listing-closed {
-  background-color: #f9f9f9;
-  opacity: 0.5;
-}
-
-.status-label {
-  display: inline-block;
-  align-self: center;
-  background-color: #777;
-  border-radius: 0.25rem;
-  color: #fff;
-  font-size: 1rem;
-  padding: 0.25rem 0.5rem;
-  margin-right: 0.5rem;
-}
-
 .description-tag {
   font-size: 0.9rem;
   color: #444;
 }
-.description-tag + .description-tag {
-  margin-top: 0.5rem;
+
+.listing-closed {
+  background-color: rgba(238, 238, 238, 0.8);
 }
 
-.grid-center {
-  display: grid;
-  place-content: center;
+.listing-won {
+  background-color: rgba(0, 255, 0, 0.2);
 }
 
 .comment {
@@ -200,6 +196,35 @@ body {
 }
 .comment .content {
   padding: 0.5rem 1rem 0;
+}
+
+.categories {
+  font-size: 1.2rem;
+}
+.categories li {
+  line-height: 2.5rem;
+}
+.categories li::marker {
+  color: #002255;
+}
+
+.callout {
+  padding: 1rem;
+  margin-top: 0.5rem;
+  border: 1px solid #e9ecef;
+  border-left-width: 0.25rem;
+  border-radius: 0.25rem;
+}
+.callout:first-of-type {
+  border-left-color: rgba(0, 255, 0, 0.2);
+}
+.callout.callout-danger {
+  border-left-color: #d9534f;
+  background-color: rgba(238, 238, 238, 0.8);
+  opacity: 0.6;
+}
+.callout.callout-info {
+  border-left-color: #5bc0de;
 }
 
 /*# sourceMappingURL=styles.css.map */
