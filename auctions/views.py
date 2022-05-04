@@ -17,7 +17,7 @@ def index(request):
 
 def category_list(request):
     context = {
-        'categories': Category.objects.order_by('name')}
+        'categories': Category.objects.filter(approved=True).order_by('name')}
     return render(request, "auctions/categories.html", context)
 
 

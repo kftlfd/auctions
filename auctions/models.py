@@ -20,11 +20,14 @@ class Listing(models.Model):
     closed = models.DateTimeField(null=True)
 
     def edit_form_data(self):
+        category = self.category.id if self.category else None
+        if category and not self.category.approved: category = '-'
+
         return {
             "title": self.title,
             "description": self.description,
             "img_url": self.img_url,
-            "category": self.category.id if self.category else None}
+            "category": category}
 
 
 class Category(models.Model):

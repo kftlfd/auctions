@@ -21,9 +21,9 @@ def listing_price(listing):
     return usd(price)
 
 @register.simple_tag
-def listing_top_bidder(listing):
+def listing_top_bid(listing):
     top_bid = listing.current_bid.order_by('amount').reverse()
-    return top_bid[0].user_id if top_bid else None
+    return top_bid[0] if top_bid else None
 
 @register.simple_tag
 def user_bid(user, listing):

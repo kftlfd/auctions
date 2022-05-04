@@ -11,6 +11,10 @@ from .forms import EditListingForm, AddListingForm, CommentForm, BidForm
 def listing_view(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     comments = Comment.objects.filter(listing_id=listing).order_by('-id')
+
+
+    if request.user == listing.user_id and listing.category and not listing.category.approved:
+        messages.add_message(request, messages.INFO, 'Your suggested category is waiting for approval.')
     
     current_bid = listing.current_bid.order_by('-amount')
     if current_bid:
@@ -99,7 +103,7 @@ def listing_edit(request, listing_id):
                 category_new = Category(name=form.cleaned_data['category_new'])
                 category_new.save()
                 listing.category = category_new
-            elif form.cleaned_data['category'] not in ['+', '']:
+            elif form.cleaned_data['category'] not in ['+', '', '-']:
                 category = Category.objects.get(pk=form.cleaned_data['category'])
                 listing.category = category
             elif form.cleaned_data['category'] == '':

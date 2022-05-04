@@ -40,13 +40,6 @@ def user_bids(request):
 
 
 @login_required
-def user_comments(request):
-    context = {
-        'comments': Comment.objects.filter(user_id=request.user).order_by('-id')}
-    return render(request, "auctions/user_comments.html", context)
-
-
-@login_required
 def user_watchlist(request):
     context = {
         'header': 'Watchlist',
