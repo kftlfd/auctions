@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .models import User
@@ -19,7 +19,9 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            next = request.GET.get('next', None)
+            if next: return redirect(next)
+            return redirect('index')
         else:
             messages.add_message(request, messages.ERROR, 'Invalid username and/or password.')
             return render(request, "auctions/login.html")
@@ -29,6 +31,8 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
+    next = request.GET.get('next', None)
+    if next: return redirect(next)
     return HttpResponseRedirect(reverse("index"))
 
 
@@ -52,6 +56,8 @@ def register(request):
             messages.add_message(request, messages.ERROR, 'Username already taken.')
             return render(request, "auctions/register.html")
         login(request, user)
+        next = request.GET.get('next', None)
+        if next: return redirect(next)
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
