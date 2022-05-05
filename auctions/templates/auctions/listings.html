@@ -1,5 +1,9 @@
 {% extends "auctions/layout.html" %}
 
+{% block title %}
+{{ header }}
+{% endblock %}
+
 {% block body %}
 
 <h2>{{ header }}</h2>
@@ -9,5 +13,7 @@
 {% else %}
   <div>Nothing here yet</div>
 {% endif %}
+
+{% include "auctions/pagination.html" %}
 
 {% endblock %}

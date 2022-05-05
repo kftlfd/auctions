@@ -1,7 +1,9 @@
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from .models import User, Listing, Bid, Comment
+from .apps import N_ON_PAGE
 
 
 def user_page(request, user_id):
@@ -15,7 +17,7 @@ def user_page(request, user_id):
 @login_required
 def user_listings(request):
     context = {
-        'header': 'Your Listings',
+        'header': 'My Listings',
         'listings': Listing.objects.filter(user_id=request.user).order_by('-id')}
     return render(request, "auctions/listings.html", context)
 
@@ -34,14 +36,25 @@ def user_bids(request):
             listings.add(bid.listing_id)
             bids.append(bid)
 
+    p = Paginator(bids, N_ON_PAGE)
+    page = p.page(request.GET.get('page', 1))
+
     context = {
         'bids': bids}
+    if page.has_other_pages():
+        context['page'] = page
     return render(request, "auctions/user_bids.html", context)
 
 
 @login_required
 def user_watchlist(request):
+    listings = request.user.watchlist.order_by('-id')
+    p = Paginator(listings, N_ON_PAGE)
+    page = p.page(request.GET.get('page', 1))
+
     context = {
         'header': 'Watchlist',
-        'listings': request.user.watchlist.order_by('-id')}
+        'listings': listings}
+    if page.has_other_pages():
+        context['page'] = page
     return render(request, 'auctions/listings.html', context)

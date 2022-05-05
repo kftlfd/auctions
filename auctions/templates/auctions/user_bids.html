@@ -1,6 +1,10 @@
 {% extends "auctions/layout.html" %}
 {% load custom_tags %}
 
+{% block title %}
+My Bids
+{% endblock %}
+
 {% block body %}
 
 <h2>My Bids</h2>
@@ -65,5 +69,7 @@
 <div>No Bids Yet</div>
 
 {% endif %}
+
+{% include "auctions/pagination.html" %}
 
 {% endblock %}
