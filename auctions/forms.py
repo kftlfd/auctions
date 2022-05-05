@@ -3,7 +3,7 @@ from .models import Category
 
 
 def categories_all():
-    return [ (c.id,c.name) for c in Category.objects.filter(approved=True) ]
+    return [ (c.id,c.name) for c in Category.objects.filter(approved=True).order_by('name') ]
 
 def categories_edit():
     return [ (None, '-- None --'), ('+', '-- Suggest New --') ] + categories_all() + [ ('-', '-- Unevaluated suggestion --') ]

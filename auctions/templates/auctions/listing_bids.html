@@ -1,6 +1,10 @@
 {% extends "auctions/layout.html" %}
 {% load custom_tags %}
 
+{% block title %}
+Listing bids: {{ listing.title }}
+{% endblock %}
+
 {% block body %}
 
 <h2>Bids: <a href="{% url 'listing_view' listing.id %}">{{ listing.title }}</a></h2>

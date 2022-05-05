@@ -1,5 +1,9 @@
 {% extends "auctions/layout.html" %}
 
+{% block title %}
+Edit listing: {{ listing.title }}
+{% endblock %}
+
 {% block body %}
 
 {% if listing.user_id == request.user %}

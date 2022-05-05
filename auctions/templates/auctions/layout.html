@@ -18,11 +18,10 @@
 
 <body>
 
-  <h1 class="logo">Auctions</h1>
+  <h1 class="logo"><a href="{% url 'index' %}">Auctions</a></h1>
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -51,15 +50,15 @@
                 {% watchlist_count user as wc%}{% if wc %}
                 <span class="watchlist-counter">{{ wc }}</span>{% endif %}</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="{% url 'logout' %}?next={{ request.META.PATH_INFO }}">Log Out</a></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}?next={{ request.META.PATH_INFO }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}">Log Out</a></li>
             </ul>
           </li>
           {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}?next={% if request.GET.next %}{{ request.GET.next }}{% else %}{{ request.META.PATH_INFO }}{% endif %}">Log In</a>
+            <a class="nav-link" href="{% url 'login' %}?next={% if request.GET.next %}{{ request.GET.next }}{% endif %}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}">Log In</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'register' %}?next={% if request.GET.next %}{{ request.GET.next }}{% else %}{{ request.META.PATH_INFO }}{% endif %}">Register</a>
+            <a class="nav-link" href="{% url 'register' %}?next={% if request.GET.next %}{{ request.GET.next }}{% endif %}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}">Register</a>
           </li>
           {% endif %}
         </ul>
