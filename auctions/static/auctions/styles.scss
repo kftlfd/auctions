@@ -4,9 +4,13 @@
   font-family: 'Beau Rivage', cursive;
   text-align: center;
   font-size: 5rem;
-  color: #002255;
   margin: 0;
   user-select: none;
+
+  a {
+    color: #002255;
+    text-decoration: none;
+  }
 }
 
 
@@ -134,7 +138,9 @@ body {
 .listing {
   &.img {
     display: grid;
-    place-content: center;
+    justify-content: center;
+    padding-top: calc(var(--bs-gutter-x) * .3);
+    padding-bottom: calc(var(--bs-gutter-x) * .3);
   }
   img {
     max-height: 300px;
@@ -160,7 +166,23 @@ body {
   }
 
   &.description {
-    color: #444;
+    
+    [type="radio"] {
+      display: none;
+    }
+    
+    label {
+      color: #555;
+      line-height: 1.2;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    [type="radio"]:checked + label {
+      -webkit-line-clamp: unset;
+    }
   }
 
   &.time {
@@ -245,14 +267,14 @@ body {
   border-left-width: .25rem;
   border-radius: .25rem;
 
-  &:first-of-type {
-    border-left-color: rgba($color: #0f0, $alpha: 0.2);
-  }
-  
   &.callout-danger {
     border-left-color: #d9534f;
     background-color: rgba($color: #eee, $alpha: 0.8);
     opacity: 0.6;
+  }
+
+  &:not(.callout-danger):first-of-type {
+    border-left-color: rgba($color: #0f0, $alpha: 0.2);
   }
 
   &.callout-info {

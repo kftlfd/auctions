@@ -3,9 +3,12 @@
   font-family: "Beau Rivage", cursive;
   text-align: center;
   font-size: 5rem;
-  color: #002255;
   margin: 0;
   user-select: none;
+}
+.logo a {
+  color: #002255;
+  text-decoration: none;
 }
 
 .flex-grow {
@@ -122,7 +125,9 @@ body {
 
 .listing.img {
   display: grid;
-  place-content: center;
+  justify-content: center;
+  padding-top: calc(var(--bs-gutter-x) * 0.3);
+  padding-bottom: calc(var(--bs-gutter-x) * 0.3);
 }
 .listing img {
   max-height: 300px;
@@ -144,8 +149,19 @@ body {
   color: #222;
   margin-bottom: 1rem;
 }
-.listing.description {
-  color: #444;
+.listing.description [type=radio] {
+  display: none;
+}
+.listing.description label {
+  color: #555;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.listing.description [type=radio]:checked + label {
+  -webkit-line-clamp: unset;
 }
 .listing.time {
   color: #555;
@@ -215,13 +231,13 @@ body {
   border-left-width: 0.25rem;
   border-radius: 0.25rem;
 }
-.callout:first-of-type {
-  border-left-color: rgba(0, 255, 0, 0.2);
-}
 .callout.callout-danger {
   border-left-color: #d9534f;
   background-color: rgba(238, 238, 238, 0.8);
   opacity: 0.6;
+}
+.callout:not(.callout-danger):first-of-type {
+  border-left-color: rgba(0, 255, 0, 0.2);
 }
 .callout.callout-info {
   border-left-color: #5bc0de;

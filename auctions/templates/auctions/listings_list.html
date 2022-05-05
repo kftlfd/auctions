@@ -29,7 +29,10 @@
             {% listing_price listing %}
           </div>
           <div class="listing description">
-            {{ listing.description }}
+            <input type="radio" name="show-{{ listing.id }}" id="description-show-{{ listing.id }}">
+            <label for="description-show-{{ listing.id }}">
+              {{ listing.description }}
+            </label>
           </div>
           <div class="listing time">
             Posted: {{ listing.time }}
