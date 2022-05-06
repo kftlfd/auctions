@@ -16,7 +16,7 @@ def usd(value):
 
 @register.simple_tag
 def listing_price(listing):
-    top_bid = listing.current_bid.order_by('amount').reverse()
+    top_bid = listing.current_bid.filter(available=True).order_by('amount').reverse()
     price = top_bid[0].amount if top_bid else listing.starting_bid
     return usd(price)
 
