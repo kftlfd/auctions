@@ -1,23 +1,23 @@
-# auctions
+# Auctions
 
-CS50 Web - Project 2: [Commerce](https://cs50.harvard.edu/web/2020/projects/2/commerce/)
+CS50 Web — Project 2: [Commerce](https://cs50.harvard.edu/web/2020/projects/2/commerce/)
 
 eBay-like web-app for auctions, build with [Django](https://www.djangoproject.com/).
 
-Live demo: https://youtu.be/ERYwui64g6M
+Video demo — https://youtu.be/ERYwui64g6M
 
-## installation
+## Installation
 
-1) install Django
+0. Install Python
+1. Install Django
 ```
 pip install Django
 ```
-
-2) download code or clone git repository
-
-3) make database migrations and start the app
+2. Download code or clone git repository
+3. Make database migrations and start the app
 ```
 python3 manage.py makemigrations auctions
 python3 manage.py migrate
 python3 manage.py runserver
 ```
+4. Access the app at http://localhost:8000
